@@ -1,6 +1,8 @@
 // Insert header here
 package assignment6;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.lang.Thread;
 
@@ -22,5 +24,6 @@ public class BookingClient {
    */
 	public List<Thread> simulate() {
 		//TODO: Implement this method
+        return new ArrayList<Thread>();
 	}
 }

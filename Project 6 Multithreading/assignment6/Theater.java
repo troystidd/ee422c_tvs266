@@ -1,6 +1,7 @@
 // insert header here
 package assignment6;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Theater {
@@ -28,6 +29,17 @@ public class Theater {
 		@Override
 		public String toString() {
 			// TODO: Implement this method to return the full Seat location ex: A1
+			return toLetter(rowNum) + seatNum;
+		}
+
+		private String toLetter(int i){
+			int q = i/26;
+			int r = i%26;
+			char letter = (char) ((int) 'A' + r);
+			if(q==0)
+				return ""+letter;
+			else
+				return toLetter(q-1) + letter;
 		}
 	}
 
@@ -66,6 +78,15 @@ public class Theater {
 		@Override
 		public String toString() {
 			// TODO: Implement this method to return a string that resembles a ticket
+			String result = "";
+			result += "-------------------------------\n";
+			result+= String.format("| Show: %31s |\n", show);
+			result+= String.format("| Box Office ID: %31s |\n", boxOfficeId);
+			result+= String.format("| Seat: %31s |\n", seat);
+			result+= String.format("| Client: %31s |\n", client);
+			result += "-------------------------------\n";
+
+			return result;
 		}
 	}
 
@@ -80,6 +101,7 @@ public class Theater {
    */
 	public Seat bestAvailableSeat() {
 		//TODO: Implement this method
+		return new Seat(0,0);
 	}
 
 	/*
@@ -91,6 +113,7 @@ public class Theater {
    */
 	public Ticket printTicket(String boxOfficeId, Seat seat, int client) {
 		//TODO: Implement this method
+		return new Ticket("","",seat,0);
 	}
 
 	/*
@@ -100,5 +123,6 @@ public class Theater {
    */
 	public List<Ticket> getTransactionLog() {
 		//TODO: Implement this method
+		return new ArrayList<Ticket>();
 	}
 }
