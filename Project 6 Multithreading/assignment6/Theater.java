@@ -1,8 +1,18 @@
-// insert header here
+/*
+ * EE422C Project 4 submission by
+ * Replace <...> with your actual data.
+ * Troy Stidd
+ * tvs266
+ * 15495
+ * Slip days used: <0>
+ * Spring 2018
+ */
 package assignment6;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Theater {
 	/*
@@ -35,11 +45,15 @@ public class Theater {
 		private String toLetter(int i){
 			int q = i/26;
 			int r = i%26;
-			char letter = (char) ((int) 'A' + r);
+			char letter = (char) ((int) 'A' + r - 1);
+			if(r==0){
+				q--;
+				letter='Z';
+			}
 			if(q==0)
 				return ""+letter;
 			else
-				return toLetter(q-1) + letter;
+				return toLetter(q) + letter;
 		}
 	}
 
@@ -78,20 +92,71 @@ public class Theater {
 		@Override
 		public String toString() {
 			// TODO: Implement this method to return a string that resembles a ticket
+			//System.out.println("tostring called");
+			/*
 			String result = "";
 			result += "-------------------------------\n";
 			result+= String.format("| Show: %31s |\n", show);
 			result+= String.format("| Box Office ID: %31s |\n", boxOfficeId);
 			result+= String.format("| Seat: %31s |\n", seat);
 			result+= String.format("| Client: %31s |\n", client);
-			result += "-------------------------------\n";
+			result += "-------------------------------\n";*/
 
-			return result;
+			StringBuilder result = new StringBuilder();
+			for (int i = 0; i < 31; i++) {
+				result.append('-');
+			}
+			result.append("\n");
+
+			result.append("| Show: " + show);
+			for (int i = 0; i < 23-show.length(); i++) {
+				result.append(' ');
+			}
+			result.append("|" + "\n");
+
+			result.append("| Box Office ID: " + boxOfficeId);
+			for (int i = 0; i < 14-boxOfficeId.length(); i++) {
+				result.append(' ');
+			}
+			result.append("|" + "\n");
+
+			result.append("| Seat: " +  seat.toString());
+			for (int i = 0; i < 23-seat.toString().length(); i++) {
+				result.append(' ');
+			}
+			result.append("|"  + "\n");
+
+			result.append("| Client: " + Integer.toString(client));
+			for (int i = 0; i < 21-Integer.toString(client).length(); i++) {
+				result.append(' ');
+			}
+			result.append("|" + "\n");
+
+			for (int i = 0; i < 31; i++) {
+				result.append('-');
+			}
+			result.append("\n");
+
+			return result.toString();
 		}
 	}
 
+	private int numRows;
+	private int numSeats;
+	private String name;
+	int currentRow = 1;
+	int currentSeat = 1;
+	boolean fullcheck;
+	private List<Ticket> tickList = new ArrayList<Ticket>();
+	private Set<String> checkList = new HashSet<String>();
+
+
 	public Theater(int numRows, int seatsPerRow, String show) {
 		// TODO: Implement this constructor
+		this.numRows = numRows;
+		numSeats = seatsPerRow;
+		name = show;
+
 	}
 
 	/*
@@ -101,7 +166,13 @@ public class Theater {
    */
 	public Seat bestAvailableSeat() {
 		//TODO: Implement this method
-		return new Seat(0,0);
+		Seat seat = new Seat(currentRow, currentSeat);
+		if(currentRow > numRows){
+			//System.out.println("fullcheck set");
+			fullcheck = true;
+			return null;
+		}
+		return seat;
 	}
 
 	/*
@@ -113,7 +184,21 @@ public class Theater {
    */
 	public Ticket printTicket(String boxOfficeId, Seat seat, int client) {
 		//TODO: Implement this method
-		return new Ticket("","",seat,0);
+		Ticket t = new Ticket(name, boxOfficeId, seat, client);
+		if (checkList.contains(seat.toString()))
+			return null;
+		checkList.add(tickList.toString());
+		tickList.add(t);
+		System.out.println(t.toString());
+		int prevseat = currentSeat;
+		currentSeat = (currentSeat + 1) % numSeats;
+		if (currentSeat == 0)
+			currentSeat = numSeats;
+		if (prevseat > currentSeat)
+			currentRow++;
+		if (numSeats == 1)
+			currentRow++;
+		return t;
 	}
 
 	/*
@@ -123,6 +208,11 @@ public class Theater {
    */
 	public List<Ticket> getTransactionLog() {
 		//TODO: Implement this method
-		return new ArrayList<Ticket>();
+		return tickList;
+	}
+
+	public boolean maxcap(){
+		//System.out.println("maxcap called");
+		return fullcheck;
 	}
 }
